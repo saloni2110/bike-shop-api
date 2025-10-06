@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Classic Bike Shop</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for a nicer look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Use the Inter font family */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+
+    <!-- Header and Navigation Section -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div>
+                <a href="./index.html" class="text-3xl font-bold text-gray-900">Classic Bike Shop</a>
+                <p class="text-gray-600 mt-1">Your one-stop shop for premium bikes</p>
+            </div>
+            <nav class="hidden md:flex space-x-6">
+                <a href="./index.html" class="text-gray-600 hover:text-blue-600 transition duration-300">Home</a>
+                <a href="./bikes.html" class="text-gray-600 hover:text-blue-600 transition duration-300">Bikes</a>
+                <a href="./test_drive.html" class="text-gray-600 hover:text-blue-600 transition duration-300">Test Drive</a>
+                <a href="./emi_calculator.html" class="text-gray-600 hover:text-blue-600 transition duration-300">EMI Calculator</a>
+                <a href="#" class="text-blue-600 font-semibold">About Us</a>
+                <a href="./login.html" class="text-gray-600 hover:text-blue-600 transition duration-300">Login</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-6 py-12">
+        <div class="bg-white p-8 md:p-12 rounded-lg shadow-lg">
+            
+            <!-- Our Story Section -->
+            <section class="text-center mb-12">
+                <h1 class="text-4xl font-bold text-gray-900 mb-4">Our Story</h1>
+                <p class="max-w-3xl mx-auto text-lg text-gray-600">
+                    Classic Bike Shop started as a small workshop fueled by a passion for cycling. We believed that a bike is more than just a mode of transport—it's a source of freedom, adventure, and joy. Today, we've grown into a premier destination for cyclists of all levels, but our core mission remains the same: to share our love for biking with the community.
+                </p>
+            </section>
+
+            <!-- Our Mission Section -->
+            <section class="mb-12">
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <div class="md:w-1/2">
+                        <img src="https://placehold.co/600x400/3498db/ffffff?text=Our+Workshop" alt="Bike workshop" class="rounded-lg shadow-md w-full">
+                    </div>
+                    <div class="md:w-1/2">
+                        <h2 class="text-3xl font-bold mb-3">Our Mission</h2>
+                        <p class="text-gray-700 leading-relaxed">
+                            Our mission is to provide high-quality bikes, accessories, and expert service to every customer. We strive to create a welcoming environment where both seasoned pros and curious beginners can find the perfect gear and advice. We are committed to promoting a healthy, sustainable lifestyle through cycling.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Meet the Team Section -->
+            <section>
+                <h2 class="text-3xl font-bold text-center mb-8">Meet Our Team</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Team Member 1 -->
+                    <div class="text-center">
+                        <img src="https://placehold.co/400x400/2ecc71/ffffff?text=Jane+Doe" alt="Team Member 1" class="w-40 h-40 rounded-full mx-auto mb-4 shadow-lg">
+                        <h3 class="text-xl font-bold">Viraj Sharma</h3>
+                        <p class="text-gray-600">Founder & Head Mechanic</p>
+                    </div>
+                    <!-- Team Member 2 -->
+                    <div class="text-center">
+                        <img src="https://placehold.co/400x400/e74c3c/ffffff?text=John+Smith" alt="Team Member 2" class="w-40 h-40 rounded-full mx-auto mb-4 shadow-lg">
+                        <h3 class="text-xl font-bold">Rohan Yadav</h3>
+                        <p class="text-gray-600">Sales Manager</p>
+                    </div>
+                    <!-- Team Member 3 -->
+                    <div class="text-center">
+                        <img src="https://placehold.co/400x400/9b59b6/ffffff?text=Emily+Jones" alt="Team Member 3" class="w-40 h-40 rounded-full mx-auto mb-4 shadow-lg">
+                        <h3 class="text-xl font-bold">Sameer Patel</h3>
+                        <p class="text-gray-600">Customer Service Specialist</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    <!-- Footer Section -->
+    <footer class="bg-gray-800 text-white mt-auto">
+        <div class="container mx-auto px-6 py-10">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+                <!-- Address -->
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Visit Us</h3>
+                    <p class="text-gray-400">123 Cycling Lane</p>
+                    <p class="text-gray-400">Bandra West, Mumbai</p>
+                    <p class="text-gray-400">Maharashtra 400050</p>
+                </div>
+                
+                <!-- Contact -->
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Contact</h3>
+                    <p class="text-gray-400">Email: contact@classicbikeshop.in</p>
+                    <p class="text-gray-400">Phone: +91 98765 43210</p>
+                </div>
+
+                <!-- Social Media -->
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Follow Us</h3>
+                    <div class="flex justify-center md:justify-start space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                            <!-- Facebook SVG -->
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" /></svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                            <!-- Twitter (X) SVG -->
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                            <!-- Instagram SVG -->
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.024.048-1.378.06-3.808.06s-2.784-.013-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 016.08 2.525c.636-.247 1.363-.416 2.427-.465C9.53 2.013 9.884 2 12.315 2zm-1.043-.882A18.91 18.91 0 007.8 1.182 6.903 6.903 0 004.269 2.544a6.903 6.903 0 00-1.362 3.552A18.91 18.91 0 001.118 7.8c-.049 1.024-.06 1.378-.06 3.808s.011 2.783.06 3.808c.043 1.03.186 1.838.416 2.533a6.903 6.903 0 001.362 3.552 6.903 6.903 0 003.552 1.362c.695.23 1.503.372 2.533.416 1.024.049 1.378.06 3.808.06 2.43 0 2.784-.011 3.808-.06 1.03-.043 1.838-.186 2.533-.416a6.903 6.903 0 003.552-1.362 6.903 6.903 0 001.362-3.552c.23-.695.372-1.503.416-2.533.049-1.024.06-1.378.06-3.808s-.011-2.783-.06-3.808a18.91 18.91 0 00-.416-2.533 6.903 6.903 0 00-1.362-3.552A6.903 6.903 0 0016.2 1.182a18.91 18.91 0 00-3.552-.23c-1.024-.049-1.378-.06-3.808-.06zM12 6.865a5.135 5.135 0 100 10.27 5.135 5.135 0 000-10.27zm0 1.802a3.333 3.333 0 110 6.666 3.333 3.333 0 010-6.666zm5.338-3.205a1.2 1.2 0 100 2.4 1.2 1.2 0 000-2.4z" clip-rule="evenodd" /></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Copyright -->
+            <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400">
+                 <p>&copy; 2025 Classic Bike Shop. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

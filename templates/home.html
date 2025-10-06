@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classic Bike Shop</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for a nicer look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Use the Inter font family */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Simple animation for the loader */
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .loader {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Header Section -->
+    <header class="bg-white shadow-md">
+        <div class="container mx-auto px-6 py-4">
+            <h1 class="text-3xl font-bold text-gray-900">Classic Bike Shop</h1>
+            <p class="text-gray-600 mt-1">Your one-stop shop for premium bikes</p>
+        </div>
+    </header>
+
+    <!-- Main Content Section -->
+    <main class="container mx-auto px-6 py-8">
+        <h2 class="text-2xl font-semibold mb-6">Our Collection</h2>
+
+        <!-- Loading Indicator -->
+        <div id="loader" class="flex justify-center items-center h-40">
+            <div class="loader"></div>
+        </div>
+
+        <!-- Error Message Container -->
+        <div id="error-message" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative" role="alert">
+            <strong class="font-bold">Error!</strong>
+            <span class="block sm:inline">Could not fetch bike data. Please ensure the Python API server is running.</span>
+        </div>
+
+        <!-- Bikes Grid Container -->
+        <div id="bikes-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Bike cards will be inserted here by JavaScript -->
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-white mt-12 py-6">
+        <div class="container mx-auto px-6 text-center text-gray-600">
+            <p>&copy; 2025 Classic Bike Shop. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript to Fetch and Display Data -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const bikesGrid = document.getElementById('bikes-grid');
+            const loader = document.getElementById('loader');
+            const errorMessage = document.getElementById('error-message');
+
+            // The URL of your Flask API endpoint
+            const apiUrl = 'http://127.0.0.1:5000/api/v1/bikes';
+
+            // Function to create a bike card element
+            function createBikeCard(bike) {
+                // Determine stock color
+                let stockColor = 'text-green-600';
+                let stockText = `${bike.stock} in stock`;
+                if (bike.stock === 0) {
+                    stockColor = 'text-red-600';
+                    stockText = 'Out of stock';
+                } else if (bike.stock < 10) {
+                    stockColor = 'text-yellow-600';
+                }
+
+                return `
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-1">${bike.brand} ${bike.model}</h3>
+                            <p class="text-sm text-gray-500 bg-gray-100 inline-block px-2 py-1 rounded-full mb-4">${bike.type}</p>
+                            
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-2xl font-bold text-blue-600">$${bike.price.toFixed(2)}</span>
+                                <span class="font-semibold ${stockColor}">${stockText}</span>
+                            </div>
+
+                            <div class="text-sm text-gray-700 space-y-2">
+                                <p><span class="font-semibold">Frame:</span> ${bike.specs.frame}</p>
+                                <p><span class="font-semibold">Gears:</span> ${bike.specs.gears}</p>
+                                <p><span class="font-semibold">Brakes:</span> ${bike.specs.brakes}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Fetch data from the API
+            async function fetchBikes() {
+                try {
+                    const response = await fetch(apiUrl);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const bikes = await response.json();
+
+                    // Hide loader
+                    loader.style.display = 'none';
+                    
+                    if (bikes.length === 0) {
+                       bikesGrid.innerHTML = '<p class="text-center col-span-full">No bikes available at the moment.</p>';
+                    } else {
+                        // Populate the grid with bike cards
+                        bikesGrid.innerHTML = bikes.map(createBikeCard).join('');
+                    }
+
+                } catch (error) {
+                    console.error('Failed to fetch bikes:', error);
+                    // Hide loader and show error message
+                    loader.style.display = 'none';
+                    errorMessage.classList.remove('hidden');
+                }
+            }
+
+            // Call the function to fetch bikes
+            fetchBikes();
+        });
+    </script>
+
+</body>
+</html>

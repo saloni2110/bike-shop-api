@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Bike Collection - Classic Bike Shop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Styles for the modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #6b7280;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+        .modal-close-btn:hover {
+            color: #1f2937;
+        }
+        
+        /* Custom scrollbar for modal content */
+        .modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        .modal-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .modal-content::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <header class="bg-white shadow-md">
+        <div class="container mx-auto px-6 py-4">
+            <h1 class="text-3xl font-bold text-gray-900">Classic Bike Shop</h1>
+            <p class="text-gray-600 mt-1">Explore Our Premium Collection</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        <h2 class="text-3xl font-bold text-center mb-10">Our Bikes</h2>
+        
+        <div id="bike-collection-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="flex justify-center items-center h-64 col-span-full">
+                <div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+        </div>
+    </main>
+
+    <div id="bike-details-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button id="modal-close-btn" class="modal-close-btn">&times;</button>
+            
+            <img id="modal-bike-image" src="" alt="Bike Image" class="w-full h-64 object-contain rounded-lg mb-4 bg-gray-100">
+            <h3 id="modal-bike-title" class="text-3xl font-bold mb-2"></h3>
+            <p id="modal-bike-price" class="text-2xl font-semibold text-blue-600 mb-4"></p>
+            <p id="modal-bike-description" class="text-gray-600 mb-6"></p>
+
+            <h4 class="text-xl font-bold mb-3 border-t pt-4">Specifications</h4>
+            <table id="modal-bike-specs" class="w-full text-left">
+                </table>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DATA SOURCE ---
+            // In a real application, this would come from an API
+            const bikesData = [
+                {
+                    id: 1,
+                    brand: 'Royal Enfield',
+                    model: 'Classic 350',
+                    price: 225000,
+                    short_desc: 'A timeless classic with modern capabilities. Perfect for city rides and long tours.',
+                    image_url:'https://www.royalenfield.com/media/magefan_blog/thumb/jawa-42-bobber-black-mirror-side-view.png.png',
+                    specs: {
+                        'Engine CC': '349 cc',
+                        'Max Power': '20.2 bhp @ 6100 rpm',
+                        'Fuel Capacity': '13 Litres',
+                        'Brakes': 'Dual-Channel ABS',
+                        'Kerb Weight': '195 kg'
+                    }
+                },
+                {
+                    id: 2,
+                    brand: 'Jawa',
+                    model: '42 Bobber',
+                    price: 210000,
+                    short_desc: 'A factory custom bobber with a distinct personality and powerful performance.',
+                    image_url: 'https://www.jawamotorcycles.com/media/magefan_blog/thumb/jawa-42-bobber-black-mirror-side-view.png.png',
+                    specs: {
+                        'Engine CC': '334 cc',
+                        'Max Power': '30.2 bhp',
+                        'Fuel Capacity': '12.5 Litres',
+                        'Brakes': 'Dual-Channel ABS',
+                        'Seat Height': '740 mm'
+                    }
+                },
+                {
+                    id: 3,
+                    brand: 'Harley-Davidson',
+                    model: 'X440',
+                    price: 279000,
+                    short_desc: 'Experience the signature Harley-Davidson power in a new, agile roadster form.',
+                    image_url: 'https://cdni.autocarindia.com/utils/imageresizer.ashx?n=https://cms.haymarketindia.com/model/uploads/modelimages/Harley-Davidson-X440-280620231628.jpg',
+                    specs: {
+                        'Engine CC': '440 cc',
+                        'Max Torque': '38 Nm @ 4000 rpm',
+                        'Fuel Capacity': '13.5 Litres',
+                        'Brakes': 'Dual-Channel ABS',
+                        'Features': 'Bluetooth Connectivity, LED Lighting'
+                    }
+                },
+                {
+                    id: 4,
+                    brand: 'Triumph',
+                    model: 'Speed 400',
+                    price: 233000,
+                    short_desc: 'A modern classic roadster, delivering a fun, agile, and confidence-inspiring ride.',
+                    image_url: 'https://images.triumphmotorcycles.co.uk/media-library/images/motorcycles/modern-classics/speed-400/my24/studio/in/speed-400-ph-red-right.png',
+                    specs: {
+                        'Engine CC': '398.15 cc',
+                        'Max Power': '39.5 bhp @ 8000 rpm',
+                        'Fuel Capacity': '13 Litres',
+                        'Brakes': 'Dual-Channel ABS',
+                        'Traction Control': 'Switchable'
+                    }
+                },
+                 {
+                    id: 5,
+                    brand: 'Yezdi',
+                    model: 'Adventure',
+                    price: 215000,
+                    short_desc: 'Built for the long haul and challenging terrains, your perfect adventure partner.',
+                    image_url: 'https://www.yezdi.com/media/magefan_blog/Yezdi-Adventure-Whiteout-Side-Profile.png',
+                    specs: {
+                        'Engine CC': '334 cc',
+                        'Max Power': '29.7 bhp',
+                        'Fuel Capacity': '15.5 Litres',
+                        'Brakes': 'Dual-Channel ABS with 3 Modes',
+                        'Suspension': 'Long-travel Telescopic Fork'
+                    }
+                },
+                {
+                    id: 6,
+                    brand: 'KTM',
+                    model: '390 Duke',
+                    price: 311000,
+                    short_desc: 'The corner rocket that maximizes riding fun with its agility and raw power.',
+                    image_url: 'https://azwecdnepstorageweb.blob.core.windows.net/media/2023/08/390-duke-2024-90-degree.png',
+                    specs: {
+                        'Engine CC': '399 cc',
+                        'Max Power': '44.25 bhp',
+                        'Fuel Capacity': '15 Litres',
+                        'Brakes': 'Dual-Channel ABS with Supermoto Mode',
+                        'Display': '5" TFT with Smartphone Connectivity'
+                    }
+                }
+            ];
+
+            // --- DOM ELEMENTS ---
+            const grid = document.getElementById('bike-collection-grid');
+            const modalOverlay = document.getElementById('bike-details-modal');
+            const modalCloseBtn = document.getElementById('modal-close-btn');
+
+            // --- FUNCTIONS ---
+
+            // Function to format number as Indian Rupees
+            const formatCurrencyINR = (amount) => {
+                return new Intl.NumberFormat('en-IN', {
+                    style: 'currency',
+                    currency: 'INR',
+                    minimumFractionDigits: 0
+                }).format(amount);
+            };
+
+            // Function to render all bike cards
+            const renderBikeCards = () => {
+                if (!grid) return;
+                grid.innerHTML = ''; // Clear loader
+                bikesData.forEach(bike => {
+                    const cardHTML = `
+                        <div class="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col transform hover:scale-105 transition-transform duration-300">
+                            <img src="${bike.image_url}" alt="${bike.brand} ${bike.model}" class="w-full h-56 object-contain bg-gray-50">
+                            <div class="p-6 flex-grow flex flex-col">
+                                <h3 class="text-xl font-bold mb-2">${bike.brand} ${bike.model}</h3>
+                                <p class="text-gray-600 mb-4 flex-grow">${bike.short_desc}</p>
+                                <div class="mt-auto flex justify-between items-center">
+                                    <span class="text-xl font-bold text-blue-600">${formatCurrencyINR(bike.price)}</span>
+                                    <button class="details-btn bg-gray-800 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-900 transition-colors" data-bike-id="${bike.id}">
+                                        Details
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    grid.innerHTML += cardHTML;
+                });
+            };
+            
+            // Function to populate and show the modal
+            const showBikeDetails = (bikeId) => {
+                const bike = bikesData.find(b => b.id == bikeId);
+                if (!bike) return;
+
+                // Populate modal elements
+                document.getElementById('modal-bike-image').src = bike.image_url;
+                document.getElementById('modal-bike-title').textContent = `${bike.brand} ${bike.model}`;
+                document.getElementById('modal-bike-price').textContent = formatCurrencyINR(bike.price);
+                document.getElementById('modal-bike-description').textContent = bike.short_desc;
+                
+                const specsTable = document.getElementById('modal-bike-specs');
+                specsTable.innerHTML = ''; // Clear previous specs
+                for (const [key, value] of Object.entries(bike.specs)) {
+                    const rowHTML = `
+                        <tr class="border-b">
+                            <td class="py-2 pr-4 font-semibold text-gray-700">${key}</td>
+                            <td class="py-2 text-gray-600">${value}</td>
+                        </tr>
+                    `;
+                    specsTable.innerHTML += rowHTML;
+                }
+
+                // Show the modal
+                modalOverlay.classList.add('active');
+            };
+
+            // Function to hide the modal
+            const hideModal = () => {
+                modalOverlay.classList.remove('active');
+            };
+
+            // --- EVENT LISTENERS ---
+
+            // Event Delegation for Details buttons
+            grid.addEventListener('click', (event) => {
+                if (event.target.matches('.details-btn')) {
+                    const bikeId = event.target.dataset.bikeId;
+                    showBikeDetails(bikeId);
+                }
+            });
+
+            // Close modal events
+            modalCloseBtn.addEventListener('click', hideModal);
+            modalOverlay.addEventListener('click', (event) => {
+                // Only close if the click is on the overlay itself, not the content
+                if (event.target === modalOverlay) {
+                    hideModal();
+                }
+            });
+            
+            // Close modal with Escape key
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && modalOverlay.classList.contains('active')) {
+                    hideModal();
+                }
+            });
+
+            // --- INITIAL RENDER ---
+            renderBikeCards();
+        });
+    </script>
+</body>
+</html>

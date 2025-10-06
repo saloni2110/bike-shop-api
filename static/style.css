@@ -1,0 +1,119 @@
+/* style.css - Custom styles for the Classic Bike Shop website */
+/* This file complements Tailwind CSS by defining base styles, custom components, and animations. */
+
+/* --- Font Imports --- */
+/* Import the 'Inter' font family from Google Fonts, which is used across the site. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+/* --- Base & Body Styles --- */
+/* These styles are applied globally to the entire website. */
+body {
+    /* Set the default font for the entire site. */
+    font-family: 'Inter', sans-serif;
+    /* A light gray background color for a soft, modern look. */
+    background-color: #f9fafb; /* Equivalent to Tailwind's bg-gray-50 */
+    /* Default text color. */
+    color: #1f2937; /* Equivalent to Tailwind's text-gray-800 */
+    /* Ensure the layout is smooth when fonts are loading. */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* --- Custom Components --- */
+/* Reusable component styles that can be applied to elements. */
+
+/* Base card style */
+.card {
+    background-color: white;
+    border-radius: 0.5rem; /* rounded-lg */
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); /* shadow-lg */
+    transition: all 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); /* shadow-xl */
+}
+
+/* Primary button style */
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600; /* font-semibold */
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+.btn-primary {
+    background-color: #2563eb; /* bg-blue-600 */
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #1d4ed8; /* hover:bg-blue-700 */
+}
+
+/* --- Form Styles --- */
+/* Consistent styling for form elements across the site. */
+
+.form-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #d1d5db; /* border-gray-300 */
+    border-radius: 0.5rem;
+    background-color: #f9fafb;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #2563eb; /* focus:border-blue-600 */
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #374151; /* text-gray-700 */
+}
+
+.error-message {
+    color: #dc2626; /* text-red-600 */
+    font-size: 0.875rem; /* text-sm */
+    margin-top: 0.25rem;
+}
+
+
+/* --- Animations --- */
+/* Custom animations used in the project. */
+
+/* Loader animation (moved from index.html) */
+.loader {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #3498db; /* A distinct blue for the loader */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* --- Header & Footer --- */
+/* Specific styles for the header and footer sections. */
+
+footer a:hover {
+    color: #ffffff; /* Make social icons white on hover */
+}

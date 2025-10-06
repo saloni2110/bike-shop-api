@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Classic Bike Shop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Use the Inter font family */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div>
+                <a href="./index.html" class="text-3xl font-bold text-gray-900">Classic Bike Shop</a>
+                <p class="text-gray-600 mt-1">Admin Dashboard</p>
+            </div>
+            <nav class="hidden md:flex space-x-6">
+                <a href="./index.html" class="text-gray-600 hover:text-blue-600 transition duration-300">View Site</a>
+                <a href="./login.html" class="text-gray-600 hover:text-blue-600 transition duration-300">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto px-6 py-8">
+        <h1 class="text-3xl font-bold mb-8">Manage Bike Inventory</h1>
+
+        <section class="bg-white p-8 rounded-lg shadow-lg mb-10">
+            <h2 class="text-2xl font-semibold mb-6">Add a New Bike</h2>
+            <form id="add-bike-form" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <input type="text" id="brand" placeholder="Brand" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                <input type="text" id="model" placeholder="Model" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                <input type="text" id="type" placeholder="Type (e.g., Roadster, Cruiser)" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                
+                <input type="number" id="price" placeholder="Price (₹)" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                
+                <input type="number" id="stock" placeholder="Stock" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                
+                <input type="text" id="frame" placeholder="Frame Material" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                <input type="text" id="gears" placeholder="Gears (e.g., 6-Speed)" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                <input type="text" id="brakes" placeholder="Brakes (e.g., Dual-Channel ABS)" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                
+                <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 lg:col-span-3">Add Bike</button>
+            </form>
+        </section>
+
+        <section>
+            <h2 class="text-2xl font-semibold mb-6">Current Inventory</h2>
+            <div id="inventory-list" class="space-y-4">
+                <div id="loader" class="flex justify-center items-center h-40"><div class="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div></div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white mt-auto py-6">
+        <div class="container mx-auto px-6 text-center text-gray-600">
+            <p>&copy; 2025 Classic Bike Shop. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const inventoryList = document.getElementById('inventory-list');
+            const addBikeForm = document.getElementById('add-bike-form');
+            const loader = document.getElementById('loader');
+            
+            const apiUrl = 'http://127.0.0.1:5000/api/v1/bikes';
+
+            // MODIFIED: Added a helper function for currency formatting
+            const formatCurrencyINR = (amount) => {
+                return new Intl.NumberFormat('en-IN', {
+                    style: 'currency',
+                    currency: 'INR',
+                    minimumFractionDigits: 0, // Optional: hides the ".00" if the price is a whole number
+                }).format(amount);
+            };
+
+            // Function to render the list of bikes
+            const renderBikes = (bikes) => {
+                loader.style.display = 'none';
+                if (bikes.length === 0) {
+                    inventoryList.innerHTML = '<p>No bikes in inventory.</p>';
+                    return;
+                }
+                
+                inventoryList.innerHTML = bikes.map(bike => `
+                    <div class="bg-white p-4 rounded-lg shadow-md flex items-center justify-between flex-wrap">
+                        <div class="flex-grow mb-2 sm:mb-0">
+                            <p class="font-bold text-lg">${bike.brand} ${bike.model}</p>
+                            <p class="text-sm text-gray-600">Price: ${formatCurrencyINR(bike.price)} | Stock: ${bike.stock}</p>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="bg-yellow-500 text-white font-semibold py-1 px-3 rounded-lg hover:bg-yellow-600 text-sm">Edit</button>
+                            <button onclick="deleteBike('${bike._id}')" class="bg-red-500 text-white font-semibold py-1 px-3 rounded-lg hover:bg-red-600 text-sm">Delete</button>
+                        </div>
+                    </div>
+                `).join('');
+            };
+
+            // Fetch all bikes from the API
+            const fetchBikes = async () => {
+                try {
+                    const response = await fetch(apiUrl);
+                    if (!response.ok) throw new Error('Failed to fetch');
+                    const bikes = await response.json();
+                    renderBikes(bikes);
+                } catch (error) {
+                    console.error('Error fetching bikes:', error);
+                    loader.style.display = 'none';
+                    inventoryList.innerHTML = '<p class="text-red-500">Error loading inventory.</p>';
+                }
+            };
+            
+            // Handle form submission to add a new bike
+            addBikeForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const newBike = {
+                    brand: document.getElementById('brand').value,
+                    model: document.getElementById('model').value,
+                    type: document.getElementById('type').value,
+                    price: parseFloat(document.getElementById('price').value),
+                    stock: parseInt(document.getElementById('stock').value),
+                    specs: {
+                        frame: document.getElementById('frame').value,
+                        gears: document.getElementById('gears').value,
+                        brakes: document.getElementById('brakes').value,
+                    }
+                };
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(newBike)
+                    });
+
+                    if (!response.ok) throw new Error('Failed to add bike');
+                    
+                    addBikeForm.reset();
+                    fetchBikes(); // Refresh the list
+                } catch (error) {
+                    console.error('Error adding bike:', error);
+                    alert('Could not add bike. Ensure the API supports POST requests.');
+                }
+            });
+            
+            // Function to delete a bike (attached to button's onclick)
+            window.deleteBike = async (bikeId) => {
+                if (!confirm('Are you sure you want to delete this bike?')) return;
+
+                try {
+                    const response = await fetch(`${apiUrl}/${bikeId}`, { method: 'DELETE' });
+                    if (!response.ok) throw new Error('Failed to delete bike');
+                    
+                    fetchBikes(); // Refresh the list
+                } catch (error) {
+                    console.error('Error deleting bike:', error);
+                    alert('Could not delete bike. Ensure the API supports DELETE requests.');
+                }
+            };
+            
+            // Initial fetch
+            fetchBikes();
+        });
+    </script>
+</body>
+</html>

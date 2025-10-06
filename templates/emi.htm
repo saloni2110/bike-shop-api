@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMI Calculator - Classic Bike Shop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Use the Inter font family */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+
+    <header class="bg-white shadow-md">
+        <div class="container mx-auto px-6 py-4">
+            <h1 class="text-3xl font-bold text-gray-900">Classic Bike Shop</h1>
+            <p class="text-gray-600 mt-1">Your one-stop shop for premium bikes</p>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto px-6 py-8 flex items-center justify-center">
+        <div class="w-full max-w-lg">
+            <div class="bg-white p-8 rounded-lg shadow-lg">
+                <h2 class="text-2xl font-bold text-center mb-6">Bike Loan EMI Calculator</h2>
+                <form id="emi-form">
+                    <div class="mb-4">
+                        <label for="loan-amount" class="block text-gray-700 text-sm font-semibold mb-2">Loan Amount (₹)</label>
+                        <input type="number" id="loan-amount" class="w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 200000" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="interest-rate" class="block text-gray-700 text-sm font-semibold mb-2">Annual Interest Rate (%)</label>
+                        <input type="number" id="interest-rate" step="0.01" class="w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 8.5" required>
+                    </div>
+                    <div class="mb-6">
+                        <label for="loan-tenure" class="block text-gray-700 text-sm font-semibold mb-2">Loan Tenure (Years)</label>
+                        <input type="number" id="loan-tenure" class="w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 2" required>
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300">
+                        Calculate EMI
+                    </button>
+                </form>
+
+                <div id="result" class="mt-8 text-center hidden">
+                    <p class="text-gray-600 text-lg">Your Monthly Payment (EMI) will be:</p>
+                    <p class="text-3xl font-bold text-blue-600 mt-2" id="emi-value"></p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-white mt-auto py-6">
+        <div class="container mx-auto px-6 text-center text-gray-600">
+            <p>&copy; 2025 Classic Bike Shop. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('emi-form').addEventListener('submit', function(event) {
+            // Prevent the form from submitting the traditional way
+            event.preventDefault();
+
+            // Get user input values
+            const principal = parseFloat(document.getElementById('loan-amount').value);
+            const annualInterestRate = parseFloat(document.getElementById('interest-rate').value);
+            const tenureInYears = parseFloat(document.getElementById('loan-tenure').value);
+
+            // Validate inputs
+            if (isNaN(principal) || isNaN(annualInterestRate) || isNaN(tenureInYears) || principal <= 0 || annualInterestRate <= 0 || tenureInYears <= 0) {
+                // In a real app, you'd show a more user-friendly error message
+                alert("Please enter valid positive numbers for all fields.");
+                return;
+            }
+
+            // Calculate monthly interest rate and tenure in months
+            const monthlyInterestRate = annualInterestRate / 12 / 100;
+            const tenureInMonths = tenureInYears * 12;
+
+            // Calculate EMI using the formula
+            const emi = (principal * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, tenureInMonths)) / (Math.pow(1 + monthlyInterestRate, tenureInMonths) - 1);
+
+            // Display the result
+            const resultDiv = document.getElementById('result');
+            const emiValueP = document.getElementById('emi-value');
+            
+            // --- MODIFIED LINE ---
+            // Format the EMI value as Indian Rupees (INR)
+            emiValueP.textContent = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(emi);
+            
+            resultDiv.classList.remove('hidden');
+        });
+    </script>
+
+</body>
+</html>
